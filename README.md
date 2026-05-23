@@ -1,87 +1,61 @@
-````md id="5i0b8e"
-# Academia App
+# Projeto Final — Sistema de Academia
 
-Sistema web desenvolvido em Java utilizando JSP, JDBC e MySQL com foco em gerenciamento de clientes e controle de check-ins em academias.
+## Descrição do Projeto
+
+O projeto consiste no desenvolvimento de um sistema de academia com autenticação de clientes, controle de academias disponíveis e registro de check-ins.
+
+O sistema permitirá que um cliente realize login, visualize academias disponíveis e faça check-in em uma unidade, armazenando um histórico das entradas realizadas.
 
 ---
 
 # Objetivo
 
-O projeto tem como objetivo simular um sistema de academias onde clientes podem:
-
-- Realizar login
-- Visualizar academias disponíveis
-- Fazer check-in
-- Consultar histórico de check-ins
-
-O sistema também possui um CRUD completo de clientes.
-
----
-
-# Tecnologias Utilizadas
+Desenvolver um sistema simples utilizando:
 
 - Java
-- JSP
-- JDBC
-- MySQL
-- Apache NetBeans
+- NetBeans
+- Banco de Dados
 - Bootstrap
+- CRUD
+- Login
+- Relacionamento entre entidades
 
 ---
 
-# Estrutura do Projeto
+# Funcionalidades Principais
 
-```text
-src/
-├── model/
-│   └── Cliente.java
-│
-├── model/dao/
-│   └── ClienteDAO.java
-│
-└── util/
-    └── ConectaDB.java
+## Login de Cliente
 
-web/
-├── cliente-cadastrar.jsp
-├── cliente-listar.jsp
-├── cliente-editar.jsp
-├── login.jsp
-└── historico.jsp
-```
+O cliente poderá:
+
+- Entrar no sistema utilizando email e senha
+- Acessar as academias disponíveis
+- Visualizar seu histórico de check-ins
 
 ---
 
-# Funcionalidades
+## CRUD de Cliente
 
-## CRUD de Clientes
+O sistema deverá permitir:
 
 - Cadastrar cliente
 - Listar clientes
-- Editar cliente
-- Excluir cliente
+- Editar clientes
+- Excluir clientes
 
 ---
 
-## Login
+## Academias Mockadas
 
-O cliente poderá acessar o sistema utilizando:
+O sistema terá 8 academias cadastradas manualmente (mock).
 
-- Email
-- Senha
-
----
-
-## Academias
-
-O sistema possui 8 academias mockadas para testes.
-
-Exemplos:
+Exemplo:
 
 - Academia Centro
-- Academia Power Gym
 - Academia Zona Sul
 - Academia Fitness Max
+- Academia Power Gym
+- etc.
 
 ---
 
@@ -89,7 +63,7 @@ Exemplos:
 
 O cliente poderá:
 
-- Escolher uma academia
+- Selecionar uma academia
 - Realizar check-in
 - Registrar data e horário automaticamente
 
@@ -97,7 +71,7 @@ O cliente poderá:
 
 ## Histórico
 
-O sistema armazena:
+O sistema armazenará:
 
 - Cliente
 - Academia
@@ -106,98 +80,17 @@ O sistema armazena:
 
 ---
 
-# Banco de Dados
-
-## Criar banco
-
-```sql
-CREATE DATABASE academia_app;
-```
-
----
-
-## Usar banco
-
-```sql
-USE academia_app;
-```
-
----
-
-## Tabela de clientes
-
-```sql
-CREATE TABLE clientes (
-    id INT PRIMARY KEY AUTO_INCREMENT,
-    nome VARCHAR(100) NOT NULL,
-    email VARCHAR(100) NOT NULL UNIQUE,
-    senha VARCHAR(100) NOT NULL,
-    telefone VARCHAR(20)
-);
-```
-
----
-
-# Configuração da Conexão
-
-Arquivo:
-
-```text
-util/ConectaDB.java
-```
-
-Configuração padrão:
-
-```java
-DriverManager.getConnection(
-    "jdbc:mysql://localhost:3306/academia_app",
-    "root",
-    ""
-);
-```
-
----
-
-# Como Executar
-
-## 1. Clonar projeto
-
-```bash
-git clone URL_DO_REPOSITORIO
-```
-
----
-
-## 2. Abrir no NetBeans
-
-- File
-- Open Project
-
----
-
-## 3. Configurar banco MySQL
-
-Criar o banco utilizando os scripts SQL presentes neste README.
-
----
-
-## 4. Executar o projeto
-
-Executar no Apache Tomcat pelo NetBeans.
-
----
-
-# Modelo de Entidades
+# Estrutura das Entidades
 
 ## Cliente
 
 | Campo | Tipo |
 |---|---|
-| id | INT |
-| nome | VARCHAR |
-| email | VARCHAR |
-| senha | VARCHAR |
-| telefone | VARCHAR |
+| id | Long |
+| nome | String |
+| email | String |
+| senha | String |
+| telefone | String |
 
 ---
 
@@ -205,9 +98,10 @@ Executar no Apache Tomcat pelo NetBeans.
 
 | Campo | Tipo |
 |---|---|
-| id | INT |
-| nome | VARCHAR |
-| endereco | VARCHAR |
+| id | Long |
+| nome | String |
+| endereco | String |
+| bairro | String |
 
 ---
 
@@ -215,33 +109,89 @@ Executar no Apache Tomcat pelo NetBeans.
 
 | Campo | Tipo |
 |---|---|
-| id | INT |
-| cliente_id | INT |
-| academia_id | INT |
-| data_hora | DATETIME |
+| id | Long |
+| cliente_id | Long |
+| academia_id | Long |
+| data_hora | DateTime |
 
 ---
 
-# Melhorias Futuras
+# Relacionamentos
 
-- Sistema de autenticação com sessão
-- Criptografia de senha
-- Dashboard
-- Painel administrativo
-- API REST
-- Responsividade mobile
+- Um cliente pode realizar vários check-ins
+- Uma academia pode receber vários check-ins
+- O check-in relaciona cliente + academia
 
 ---
 
-# Integrantes
+# Tecnologias
 
-- José Ulisses
-- Nome Integrante 2
-- Nome Integrante 3
+- Java
+- NetBeans
+- MySQL
+- Bootstrap
+- JDBC
+- MVC
 
 ---
 
-# Licença
+# Organização do Projeto
 
-Projeto acadêmico desenvolvido para fins educacionais.
-````
+## Backend
+
+Responsável por:
+
+- Regras de negócio
+- Login
+- CRUD
+- Banco de dados
+
+---
+
+## Frontend
+
+Responsável por:
+
+- Telas
+- Bootstrap
+- Interface do usuário
+
+---
+
+# Fluxo do Sistema
+
+1. Cliente realiza login
+2. Sistema exibe academias disponíveis
+3. Cliente escolhe uma academia
+4. Sistema registra check-in
+5. Histórico é atualizado
+
+---
+
+# Evidências para Entrega
+
+- Código no NetBeans
+- Banco de dados funcionando
+- Prints do sistema
+- Diagrama/desenho da solução
+- Uso do Bootstrap
+- PDF no padrão ABNT
+
+---
+
+# Fluxo Básico de Git e Commits
+
+## Entrar na branch dev
+
+```bash
+git checkout dev
+git pull origin dev
+git add .
+git commit -m "feat: adiciona login de cliente"
+git push origin dev
+
+src/
+├── model/
+├──── dao/
+├── controller/
+├── util
