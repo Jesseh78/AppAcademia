@@ -23,7 +23,7 @@ public class ClienteController extends HttpServlet {
     private final ClienteDAO dao = new ClienteDAO();
     private final AcademiaDAO academiaDAO = new AcademiaDAO();
 
-    protected void Get(HttpServletRequest request, HttpServletResponse response)
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         String acao = request.getParameter("acao");
@@ -55,7 +55,7 @@ public class ClienteController extends HttpServlet {
         }
     }
 
-    protected void Post(HttpServletRequest request, HttpServletResponse response)
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
         Cliente c = new Cliente();
