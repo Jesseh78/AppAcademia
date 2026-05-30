@@ -23,57 +23,63 @@
 <div class="container mt-5">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
+
         <h2>Clientes</h2>
 
-        <a href="../cliente?acao=novo" class="btn btn-primary">
+        <a href="${pageContext.request.contextPath}/cliente?acao=novo"
+           class="btn btn-primary">
             Novo Cliente
         </a>
+
     </div>
 
     <table class="table table-bordered table-hover bg-white">
 
         <thead class="table-dark">
-        <tr>
-            <th>ID</th>
-            <th>Nome</th>
-            <th>CPF</th>
-            <th>Email</th>
-            <th>Telefone</th>
-            <th>Status</th>
-            <th>Acoes</th>
-        </tr>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Email</th>
+                <th>Telefone</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
         </thead>
 
         <tbody>
 
         <%
             if (listaClientes != null) {
+
                 for (Cliente c : listaClientes) {
         %>
 
-        <tr>
-            <td><%= c.getIdCliente() %></td>
-            <td><%= c.getNome() %></td>
-            <td><%= c.getCpf() %></td>
-            <td><%= c.getEmail() %></td>
-            <td><%= c.getTelefone() %></td>
-            <td><%= c.getStatus() %></td>
+            <tr>
 
-            <td>
+                <td><%= c.getIdCliente() %></td>
+                <td><%= c.getNome() %></td>
+                <td><%= c.getCpf() %></td>
+                <td><%= c.getEmail() %></td>
+                <td><%= c.getTelefone() %></td>
+                <td><%= c.getStatus() %></td>
 
-                <a href="../cliente?acao=editar&id=<%= c.getIdCliente() %>"
-                   class="btn btn-warning btn-sm">
-                    Editar
-                </a>
+                <td>
 
-                <a href="../cliente?acao=excluir&id=<%= c.getIdCliente() %>"
-                   class="btn btn-danger btn-sm"
-                   onclick="return confirm('Deseja excluir este cliente?')">
-                    Excluir
-                </a>
+                    <a href="${pageContext.request.contextPath}/cliente?acao=editar&id=<%= c.getIdCliente() %>"
+                       class="btn btn-warning btn-sm">
+                        Editar
+                    </a>
 
-            </td>
-        </tr>
+                    <a href="${pageContext.request.contextPath}/cliente?acao=excluir&id=<%= c.getIdCliente() %>"
+                       class="btn btn-danger btn-sm"
+                       onclick="return confirm('Deseja excluir este cliente?')">
+                        Excluir
+                    </a>
+
+                </td>
+
+            </tr>
 
         <%
                 }
