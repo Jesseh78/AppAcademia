@@ -10,183 +10,309 @@
 package dao;
 
 import model.Historico;
-import java.sql.*;
+import util.ConectaDB;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import util.ConectaDB;
 
 public class HistoricoDAO {
 
-    Connection con;
+    private final Connection con;
 
     public HistoricoDAO() {
         con = ConectaDB.getConnection();
     }
 
     public void inserir(Historico h) {
-        String sql = "INSERT INTO historico (id_cliente, id_academia, data_checkin, hora_checkin, status_checkin, tipo_plano, observacao, origem_checkin, data_registro) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        String sql =
+                "INSERT INTO historico "
+                + "(id_cliente, id_academia, data_checkin, "
+                + "hora_checkin, status_checkin, tipo_plano, "
+                + "observacao, origem_checkin) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
-            try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, h.getIdCliente());
-                stmt.setInt(2, h.getIdAcademia());
-                if (h.getDataCheckin() != null) {
-                    stmt.setDate(3, new java.sql.Date(h.getDataCheckin().getTime()));
-                } else {
-                    stmt.setDate(3, null);
-                }
-                stmt.setString(4, h.getHoraCheckin());
-                stmt.setString(5, h.getStatusCheckin());
-                stmt.setString(6, h.getTipoPlano());
-                stmt.setString(7, h.getObservacao());
-                stmt.setString(8, h.getOrigemCheckin());
-                if (h.getDataRegistro() != null) {
-                    stmt.setDate(9, new java.sql.Date(h.getDataRegistro().getTime()));
-                } else {
-                    stmt.setDate(9, null);
-                }
-                stmt.execute();
-            }
+
+            PreparedStatement stmt =
+                    con.prepareStatement(sql);
+
+            stmt.setInt(1, h.getIdCliente());
+            stmt.setInt(2, h.getIdAcademia());
+            stmt.setDate(3, h.getDataCheckin());
+            stmt.setTime(4, h.getHoraCheckin());
+            stmt.setString(5, h.getStatusCheckin());
+            stmt.setString(6, h.getTipoPlano());
+            stmt.setString(7, h.getObservacao());
+            stmt.setString(8, h.getOrigemCheckin());
+
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erro ao inserir historico: " + e);
+
+            System.out.println(
+                    "Erro ao inserir histórico: "
+                    + e.getMessage());
         }
     }
 
-    public List<Historico> listarPorCliente(int idCliente) {
-        List<Historico> lista = new ArrayList<>();
-        String sql = "SELECT * FROM historico WHERE id_cliente=?";
+    public void atualizar(Historico h) {
+
+        String sql =
+                "UPDATE historico SET "
+                + "id_cliente=?, "
+                + "id_academia=?, "
+                + "data_checkin=?, "
+                + "hora_checkin=?, "
+                + "status_checkin=?, "
+                + "tipo_plano=?, "
+                + "observacao=?, "
+                + "origem_checkin=? "
+                + "WHERE id_historico=?";
 
         try {
-            try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, idCliente);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    while (rs.next()) {
-                        Historico h = new Historico();
-                        h.setIdHistorico(rs.getInt("id_historico"));
-                        h.setIdCliente(rs.getInt("id_cliente"));
-                        h.setIdAcademia(rs.getInt("id_academia"));
-                        h.setDataCheckin(rs.getDate("data_checkin"));
-                        h.setHoraCheckin(rs.getString("hora_checkin"));
-                        h.setStatusCheckin(rs.getString("status_checkin"));
-                        h.setTipoPlano(rs.getString("tipo_plano"));
-                        h.setObservacao(rs.getString("observacao"));
-                        h.setOrigemCheckin(rs.getString("origem_checkin"));
-                        h.setDataRegistro(rs.getDate("data_registro"));
 
-                        lista.add(h);
-                    }
-                }
-            }
+            PreparedStatement stmt =
+                    con.prepareStatement(sql);
+
+            stmt.setInt(1, h.getIdCliente());
+            stmt.setInt(2, h.getIdAcademia());
+            stmt.setDate(3, h.getDataCheckin());
+            stmt.setTime(4, h.getHoraCheckin());
+            stmt.setString(5, h.getStatusCheckin());
+            stmt.setString(6, h.getTipoPlano());
+            stmt.setString(7, h.getObservacao());
+            stmt.setString(8, h.getOrigemCheckin());
+            stmt.setInt(9, h.getIdHistorico());
+
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erro ao listar historico: " + e);
-        }
 
-        return lista;
+            System.out.println(
+                    "Erro ao atualizar histórico: "
+                    + e.getMessage());
+        }
     }
 
-    public List<Historico> listar() {
-        List<Historico> lista = new ArrayList<>();
-        String sql = "SELECT * FROM historico";
+    public void excluir(int idHistorico) {
+
+        String sql =
+                "DELETE FROM historico "
+                + "WHERE id_historico=?";
 
         try {
-            try (PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-                while (rs.next()) {
-                    Historico h = new Historico();
-                    h.setIdHistorico(rs.getInt("id_historico"));
-                    h.setIdCliente(rs.getInt("id_cliente"));
-                    h.setIdAcademia(rs.getInt("id_academia"));
-                    h.setDataCheckin(rs.getDate("data_checkin"));
-                    h.setHoraCheckin(rs.getString("hora_checkin"));
-                    h.setStatusCheckin(rs.getString("status_checkin"));
-                    h.setTipoPlano(rs.getString("tipo_plano"));
-                    h.setObservacao(rs.getString("observacao"));
-                    h.setOrigemCheckin(rs.getString("origem_checkin"));
-                    h.setDataRegistro(rs.getDate("data_registro"));
-                    lista.add(h);
-                }
-            }
+
+            PreparedStatement stmt =
+                    con.prepareStatement(sql);
+
+            stmt.setInt(1, idHistorico);
+
+            stmt.executeUpdate();
 
         } catch (SQLException e) {
-            System.out.println("Erro ao listar historico: " + e);
-        }
 
-        return lista;
+            System.out.println(
+                    "Erro ao excluir histórico: "
+                    + e.getMessage());
+        }
     }
 
     public Historico buscarPorId(int idHistorico) {
-        String sql = "SELECT * FROM historico WHERE id_historico=?";
-        Historico h = new Historico();
+
+        String sql =
+                "SELECT * FROM historico "
+                + "WHERE id_historico=?";
+
+        Historico h = null;
 
         try {
-            try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, idHistorico);
-                try (ResultSet rs = stmt.executeQuery()) {
-                    if (rs.next()) {
-                        h.setIdHistorico(rs.getInt("id_historico"));
-                        h.setIdCliente(rs.getInt("id_cliente"));
-                        h.setIdAcademia(rs.getInt("id_academia"));
-                        h.setDataCheckin(rs.getDate("data_checkin"));
-                        h.setHoraCheckin(rs.getString("hora_checkin"));
-                        h.setStatusCheckin(rs.getString("status_checkin"));
-                        h.setTipoPlano(rs.getString("tipo_plano"));
-                        h.setObservacao(rs.getString("observacao"));
-                        h.setOrigemCheckin(rs.getString("origem_checkin"));
-                        h.setDataRegistro(rs.getDate("data_registro"));
-                    }
-                }
+
+            PreparedStatement stmt =
+                    con.prepareStatement(sql);
+
+            stmt.setInt(1, idHistorico);
+
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+
+                h = new Historico();
+
+                h.setIdHistorico(
+                        rs.getInt("id_historico"));
+
+                h.setIdCliente(
+                        rs.getInt("id_cliente"));
+
+                h.setIdAcademia(
+                        rs.getInt("id_academia"));
+
+                h.setDataCheckin(
+                        rs.getDate("data_checkin"));
+
+                h.setHoraCheckin(
+                        rs.getTime("hora_checkin"));
+
+                h.setStatusCheckin(
+                        rs.getString("status_checkin"));
+
+                h.setTipoPlano(
+                        rs.getString("tipo_plano"));
+
+                h.setObservacao(
+                        rs.getString("observacao"));
+
+                h.setOrigemCheckin(
+                        rs.getString("origem_checkin"));
+
+                h.setDataRegistro(
+                        rs.getTimestamp("data_registro"));
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao buscar historico: " + e);
+
+            System.out.println(
+                    "Erro ao buscar histórico: "
+                    + e.getMessage());
         }
 
         return h;
     }
 
-    public void excluir(int idHistorico) {
-        String sql = "DELETE FROM historico WHERE id_historico=?";
+    public List<Historico> listar() {
+
+        List<Historico> lista =
+                new ArrayList<>();
+
+        String sql =
+                "SELECT * FROM historico";
 
         try {
-            try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, idHistorico);
-                stmt.execute();
+
+            PreparedStatement stmt =
+                    con.prepareStatement(sql);
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Historico h =
+                        new Historico();
+
+                h.setIdHistorico(
+                        rs.getInt("id_historico"));
+
+                h.setIdCliente(
+                        rs.getInt("id_cliente"));
+
+                h.setIdAcademia(
+                        rs.getInt("id_academia"));
+
+                h.setDataCheckin(
+                        rs.getDate("data_checkin"));
+
+                h.setHoraCheckin(
+                        rs.getTime("hora_checkin"));
+
+                h.setStatusCheckin(
+                        rs.getString("status_checkin"));
+
+                h.setTipoPlano(
+                        rs.getString("tipo_plano"));
+
+                h.setObservacao(
+                        rs.getString("observacao"));
+
+                h.setOrigemCheckin(
+                        rs.getString("origem_checkin"));
+
+                h.setDataRegistro(
+                        rs.getTimestamp("data_registro"));
+
+                lista.add(h);
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao excluir historico: " + e);
+
+            System.out.println(
+                    "Erro ao listar histórico: "
+                    + e.getMessage());
         }
+
+        return lista;
     }
 
-    public void atualizar(Historico h) {
-        String sql = "UPDATE historico SET id_cliente=?, id_academia=?, data_checkin=?, hora_checkin=?, status_checkin=?, tipo_plano=?, observacao=?, origem_checkin=?, data_registro=? WHERE id_historico=?";
+    public List<Historico> listarPorCliente(
+            int idCliente) {
+
+        List<Historico> lista =
+                new ArrayList<>();
+
+        String sql =
+                "SELECT * FROM historico "
+                + "WHERE id_cliente=?";
 
         try {
-            try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, h.getIdCliente());
-                stmt.setInt(2, h.getIdAcademia());
-                if (h.getDataCheckin() != null) {
-                    stmt.setDate(3, new java.sql.Date(h.getDataCheckin().getTime()));
-                } else {
-                    stmt.setDate(3, null);
-                }
-                stmt.setString(4, h.getHoraCheckin());
-                stmt.setString(5, h.getStatusCheckin());
-                stmt.setString(6, h.getTipoPlano());
-                stmt.setString(7, h.getObservacao());
-                stmt.setString(8, h.getOrigemCheckin());
-                if (h.getDataRegistro() != null) {
-                    stmt.setDate(9, new java.sql.Date(h.getDataRegistro().getTime()));
-                } else {
-                    stmt.setDate(9, null);
-                }
-                stmt.setInt(10, h.getIdHistorico());
-                stmt.execute();
+
+            PreparedStatement stmt =
+                    con.prepareStatement(sql);
+
+            stmt.setInt(1, idCliente);
+
+            ResultSet rs =
+                    stmt.executeQuery();
+
+            while (rs.next()) {
+
+                Historico h =
+                        new Historico();
+
+                h.setIdHistorico(
+                        rs.getInt("id_historico"));
+
+                h.setIdCliente(
+                        rs.getInt("id_cliente"));
+
+                h.setIdAcademia(
+                        rs.getInt("id_academia"));
+
+                h.setDataCheckin(
+                        rs.getDate("data_checkin"));
+
+                h.setHoraCheckin(
+                        rs.getTime("hora_checkin"));
+
+                h.setStatusCheckin(
+                        rs.getString("status_checkin"));
+
+                h.setTipoPlano(
+                        rs.getString("tipo_plano"));
+
+                h.setObservacao(
+                        rs.getString("observacao"));
+
+                h.setOrigemCheckin(
+                        rs.getString("origem_checkin"));
+
+                h.setDataRegistro(
+                        rs.getTimestamp("data_registro"));
+
+                lista.add(h);
             }
 
         } catch (SQLException e) {
-            System.out.println("Erro ao atualizar historico: " + e);
+
+            System.out.println(
+                    "Erro ao listar histórico: "
+                    + e.getMessage());
         }
+
+        return lista;
     }
 }

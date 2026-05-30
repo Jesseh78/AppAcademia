@@ -5,60 +5,106 @@
 package controller;
 
 import dao.AcademiaDAO;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.util.List;
 import model.Academia;
 
-/**
- *
- * @author Madru
- */
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.*;
+
+import java.io.IOException;
+
 @WebServlet("/academia")
 public class AcademiaController extends HttpServlet {
 
-    AcademiaDAO dao = new AcademiaDAO();
+    private final AcademiaDAO dao = new AcademiaDAO();
 
-    /**
-     *
-     * @param req
-     * @param resp
-     * @throws ServletException
-     * @throws IOException
-     */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        try {
-            List<Academia> lista = dao.listar();
-            req.setAttribute("lista", lista);
-            req.getRequestDispatcher("/academia/lista.jsp").forward(req, resp);
-        } catch (ServletException | IOException  e) {
-            throw new ServletException(e);
+    protected void doGet(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String acao = request.getParameter("acao");
+
+        if (acao == null) {
+            acao = "listar";
+        }
+
+        switch (acao) {
+
+            case "listar":
+
+                request.setAttribute("lista", dao.listar());
+
+                request.getRequestDispatcher("/academia/lista.jsp")
+                        .forward(request, response);
+
+                break;
+
+            case "novo":
+
+                request.getRequestDispatcher("/academia/form.jsp")
+                        .forward(request, response);
+
+                break;
+
+            case "editar":
+
+                int id = Integer.parseInt(
+                        request.getParameter("id"));
+
+                Academia academia = dao.buscarPorId(id);
+
+                request.setAttribute("academia", academia);
+
+                request.getRequestDispatcher("/academia/form.jsp")
+                        .forward(request, response);
+
+                break;
+
+            case "excluir":
+
+                dao.excluir(
+                        Integer.parseInt(
+                                request.getParameter("id")));
+
+                response.sendRedirect("academia?acao=listar");
+
+                break;
         }
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        Academia a = new Academia();
-        a.setNome(req.getParameter("nome"));
-        a.setCnpj(req.getParameter("cnpj"));
-        a.setTelefone(req.getParameter("telefone"));
-        a.setEmail(req.getParameter("email"));
-        a.setEndereco(req.getParameter("endereco"));
-        a.setBairro(req.getParameter("bairro"));
-        a.setCidade(req.getParameter("cidade"));
-        a.setEstado(req.getParameter("estado"));
-        a.setHorarioFuncionamento(req.getParameter("horarioFuncionamento"));
+    protected void doPost(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
 
-        try {
+        Academia a = new Academia();
+
+        a.setNome(request.getParameter("nome"));
+        a.setCnpj(request.getParameter("cnpj"));
+        a.setTelefone(request.getParameter("telefone"));
+        a.setEmail(request.getParameter("email"));
+        a.setEndereco(request.getParameter("endereco"));
+        a.setBairro(request.getParameter("bairro"));
+        a.setCidade(request.getParameter("cidade"));
+        a.setEstado(request.getParameter("estado"));
+
+        a.setHorarioFuncionamento(
+                request.getParameter("horarioFuncionamento"));
+
+        String id = request.getParameter("id");
+
+        if (id == null || id.isEmpty()) {
+
             dao.inserir(a);
-            resp.sendRedirect("academia");
-        } catch (IOException e) {
-            throw new ServletException(e);
+
+        } else {
+
+            a.setIdAcademia(Integer.parseInt(id));
+
+            dao.atualizar(a);
         }
+
+        response.sendRedirect("academia?acao=listar");
     }
 }

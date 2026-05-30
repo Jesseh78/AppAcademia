@@ -2,12 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package dao;
+
 
 /**
  *
  * @author Madru
  */
+
+package dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -17,16 +19,16 @@ import java.util.List;
 import model.Academia;
 import util.ConectaDB;
 
-
-
-
 public class AcademiaDAO {
 
-    public void inserir(Academia a){
-        String sql = "INSERT INTO academia (nome, cnpj, telefone, email, endereco, bairro, cidade, estado, horario_funcionamento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public void inserir(Academia a) {
+
+        String sql = "INSERT INTO academia "
+                + "(nome, cnpj, telefone, email, endereco, bairro, cidade, estado, horario_funcionamento) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = ConectaDB.getConnection();
-            PreparedStatement stmt = con.prepareStatement(sql)) {
+             PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, a.getNome());
             stmt.setString(2, a.getCnpj());
@@ -37,21 +39,28 @@ public class AcademiaDAO {
             stmt.setString(7, a.getCidade());
             stmt.setString(8, a.getEstado());
             stmt.setString(9, a.getHorarioFuncionamento());
-            stmt.execute();
 
-        } catch (Exception e) {}
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao inserir academia: " + e.getMessage());
+        }
     }
 
-    public List<Academia> listar(){
+    public List<Academia> listar() {
+
         List<Academia> lista = new ArrayList<>();
+
         String sql = "SELECT * FROM academia";
 
         try (Connection con = ConectaDB.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql);
              ResultSet rs = stmt.executeQuery()) {
 
-            while(rs.next()){
+            while (rs.next()) {
+
                 Academia a = new Academia();
+
                 a.setIdAcademia(rs.getInt("id_academia"));
                 a.setNome(rs.getString("nome"));
                 a.setCnpj(rs.getString("cnpj"));
@@ -61,26 +70,36 @@ public class AcademiaDAO {
                 a.setBairro(rs.getString("bairro"));
                 a.setCidade(rs.getString("cidade"));
                 a.setEstado(rs.getString("estado"));
-                a.setHorarioFuncionamento(rs.getString("horario_funcionamento"));
+                a.setHorarioFuncionamento(
+                        rs.getString("horario_funcionamento"));
+
                 lista.add(a);
             }
 
-        } catch(Exception e){}
+        } catch (Exception e) {
+            System.out.println("Erro ao listar academia: " + e.getMessage());
+        }
 
         return lista;
     }
 
-    public Academia buscar(int id){
+    public Academia buscarPorId(int id) {
+
         String sql = "SELECT * FROM academia WHERE id_academia=?";
-        Academia a = new Academia();
+
+        Academia a = null;
 
         try (Connection con = ConectaDB.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
+
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
+
+                a = new Academia();
+
                 a.setIdAcademia(rs.getInt("id_academia"));
                 a.setNome(rs.getString("nome"));
                 a.setCnpj(rs.getString("cnpj"));
@@ -90,16 +109,30 @@ public class AcademiaDAO {
                 a.setBairro(rs.getString("bairro"));
                 a.setCidade(rs.getString("cidade"));
                 a.setEstado(rs.getString("estado"));
-                a.setHorarioFuncionamento(rs.getString("horario_funcionamento"));
+                a.setHorarioFuncionamento(
+                        rs.getString("horario_funcionamento"));
             }
 
-        } catch(Exception e){}
+        } catch (Exception e) {
+            System.out.println("Erro ao buscar academia: " + e.getMessage());
+        }
 
         return a;
     }
 
-    public void atualizar(Academia a){
-        String sql = "UPDATE academia SET nome=?, cnpj=?, telefone=?, email=?, endereco=?, bairro=?, cidade=?, estado=?, horario_funcionamento=? WHERE id_academia=?";
+    public void atualizar(Academia a) {
+
+        String sql = "UPDATE academia SET "
+                + "nome=?, "
+                + "cnpj=?, "
+                + "telefone=?, "
+                + "email=?, "
+                + "endereco=?, "
+                + "bairro=?, "
+                + "cidade=?, "
+                + "estado=?, "
+                + "horario_funcionamento=? "
+                + "WHERE id_academia=?";
 
         try (Connection con = ConectaDB.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
@@ -114,20 +147,27 @@ public class AcademiaDAO {
             stmt.setString(8, a.getEstado());
             stmt.setString(9, a.getHorarioFuncionamento());
             stmt.setInt(10, a.getIdAcademia());
-            stmt.execute();
 
-        } catch(Exception e){}
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao atualizar academia: " + e.getMessage());
+        }
     }
 
-    public void excluir(int id){
+    public void excluir(int id) {
+
         String sql = "DELETE FROM academia WHERE id_academia=?";
 
         try (Connection con = ConectaDB.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setInt(1, id);
-            stmt.execute();
 
-        } catch(Exception e){}
+            stmt.executeUpdate();
+
+        } catch (Exception e) {
+            System.out.println("Erro ao excluir academia: " + e.getMessage());
+        }
     }
 }
