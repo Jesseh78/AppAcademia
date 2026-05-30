@@ -9,26 +9,46 @@ package model;
  * @author Madru
  */
 public class Cliente {
-    private int id;
+    private int idCliente;
     private String nome;
+    private String cpf;
     private String email;
+    private String senha;
     private String telefone;
-    private int idAcademia;
+    private java.util.Date dataNascimento;
+    private String sexo;
+    private String endereco;
+    private String status;
 
     public Cliente(){}
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getIdCliente() { return idCliente; }
+    public void setIdCliente(int idCliente) { this.idCliente = idCliente; }
 
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
 
+    public String getCpf() { return cpf; }
+    public void setCpf(String cpf) { this.cpf = cpf; }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
+
+    public String getSenha() { return senha; }
+    public void setSenha(String senha) { this.senha = senha; }
 
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }
 
-    public int getIdAcademia() { return idAcademia; }
-    public void setIdAcademia(int idAcademia) { this.idAcademia = idAcademia; }
+    public java.util.Date getDataNascimento() { return dataNascimento; }
+    public void setDataNascimento(java.util.Date dataNascimento) { this.dataNascimento = dataNascimento; }
+
+    public String getSexo() { return sexo; }
+    public void setSexo(String sexo) { this.sexo = sexo; }
+
+    public String getEndereco() { return endereco; }
+    public void setEndereco(String endereco) { this.endereco = endereco; }
+
+    public String getStatus() { return status; }
+    public void setStatus(String status) { this.status = status; }
 }

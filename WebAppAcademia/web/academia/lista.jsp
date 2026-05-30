@@ -48,7 +48,7 @@
                     </h4>
 
                     <p class="card-text">
-                        <strong>Endereço:</strong>
+                        <strong>Endereco:</strong>
                         <%= a.getEndereco() %>
                     </p>
 
@@ -57,11 +57,26 @@
                         <%= a.getBairro() %>
                     </p>
 
+                    <p class="card-text">
+                        <strong>Cidade:</strong>
+                        <%= a.getCidade() %>
+                    </p>
+
+                    <p class="card-text">
+                        <strong>Estado:</strong>
+                        <%= a.getEstado() %>
+                    </p>
+
+                    <p class="card-text">
+                        <strong>Horario:</strong>
+                        <%= a.getHorarioFuncionamento() %>
+                    </p>
+
                     <form method="post" action="../historico">
 
                         <input type="hidden"
                                name="idAcademia"
-                               value="<%= a.getId() %>">
+                               value="<%= a.getIdAcademia() %>">
 
                         <button type="submit"
                                 class="btn btn-success w-100">

@@ -23,14 +23,20 @@ import util.ConectaDB;
 public class AcademiaDAO {
 
     public void inserir(Academia a){
-        String sql = "INSERT INTO academia (nome, endereco, telefone) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO academia (nome, cnpj, telefone, email, endereco, bairro, cidade, estado, horario_funcionamento) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection con = ConectaDB.getConnection();
             PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, a.getNome());
-            stmt.setString(2, a.getEndereco());
+            stmt.setString(2, a.getCnpj());
             stmt.setString(3, a.getTelefone());
+            stmt.setString(4, a.getEmail());
+            stmt.setString(5, a.getEndereco());
+            stmt.setString(6, a.getBairro());
+            stmt.setString(7, a.getCidade());
+            stmt.setString(8, a.getEstado());
+            stmt.setString(9, a.getHorarioFuncionamento());
             stmt.execute();
 
         } catch (Exception e) {}
@@ -46,10 +52,16 @@ public class AcademiaDAO {
 
             while(rs.next()){
                 Academia a = new Academia();
-                a.setId(rs.getInt("id"));
+                a.setIdAcademia(rs.getInt("id_academia"));
                 a.setNome(rs.getString("nome"));
-                a.setEndereco(rs.getString("endereco"));
+                a.setCnpj(rs.getString("cnpj"));
                 a.setTelefone(rs.getString("telefone"));
+                a.setEmail(rs.getString("email"));
+                a.setEndereco(rs.getString("endereco"));
+                a.setBairro(rs.getString("bairro"));
+                a.setCidade(rs.getString("cidade"));
+                a.setEstado(rs.getString("estado"));
+                a.setHorarioFuncionamento(rs.getString("horario_funcionamento"));
                 lista.add(a);
             }
 
@@ -59,7 +71,7 @@ public class AcademiaDAO {
     }
 
     public Academia buscar(int id){
-        String sql = "SELECT * FROM academia WHERE id=?";
+        String sql = "SELECT * FROM academia WHERE id_academia=?";
         Academia a = new Academia();
 
         try (Connection con = ConectaDB.getConnection();
@@ -69,10 +81,16 @@ public class AcademiaDAO {
             ResultSet rs = stmt.executeQuery();
 
             if(rs.next()){
-                a.setId(rs.getInt("id"));
+                a.setIdAcademia(rs.getInt("id_academia"));
                 a.setNome(rs.getString("nome"));
-                a.setEndereco(rs.getString("endereco"));
+                a.setCnpj(rs.getString("cnpj"));
                 a.setTelefone(rs.getString("telefone"));
+                a.setEmail(rs.getString("email"));
+                a.setEndereco(rs.getString("endereco"));
+                a.setBairro(rs.getString("bairro"));
+                a.setCidade(rs.getString("cidade"));
+                a.setEstado(rs.getString("estado"));
+                a.setHorarioFuncionamento(rs.getString("horario_funcionamento"));
             }
 
         } catch(Exception e){}
@@ -81,22 +99,28 @@ public class AcademiaDAO {
     }
 
     public void atualizar(Academia a){
-        String sql = "UPDATE academia SET nome=?, endereco=?, telefone=? WHERE id=?";
+        String sql = "UPDATE academia SET nome=?, cnpj=?, telefone=?, email=?, endereco=?, bairro=?, cidade=?, estado=?, horario_funcionamento=? WHERE id_academia=?";
 
         try (Connection con = ConectaDB.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {
 
             stmt.setString(1, a.getNome());
-            stmt.setString(2, a.getEndereco());
+            stmt.setString(2, a.getCnpj());
             stmt.setString(3, a.getTelefone());
-            stmt.setInt(4, a.getId());
+            stmt.setString(4, a.getEmail());
+            stmt.setString(5, a.getEndereco());
+            stmt.setString(6, a.getBairro());
+            stmt.setString(7, a.getCidade());
+            stmt.setString(8, a.getEstado());
+            stmt.setString(9, a.getHorarioFuncionamento());
+            stmt.setInt(10, a.getIdAcademia());
             stmt.execute();
 
         } catch(Exception e){}
     }
 
     public void excluir(int id){
-        String sql = "DELETE FROM academia WHERE id=?";
+        String sql = "DELETE FROM academia WHERE id_academia=?";
 
         try (Connection con = ConectaDB.getConnection();
              PreparedStatement stmt = con.prepareStatement(sql)) {

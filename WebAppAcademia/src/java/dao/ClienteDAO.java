@@ -24,14 +24,23 @@ public class ClienteDAO {
     }
 
     public void inserir(Cliente c) {
-        String sql = "INSERT INTO cliente (nome, email, telefone, id_academia) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO cliente (nome, cpf, email, senha, telefone, data_nascimento, sexo, endereco, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             try (PreparedStatement stmt = con.prepareStatement(sql)) {
                 stmt.setString(1, c.getNome());
-                stmt.setString(2, c.getEmail());
-                stmt.setString(3, c.getTelefone());
-                stmt.setInt(4, c.getIdAcademia());
+                stmt.setString(2, c.getCpf());
+                stmt.setString(3, c.getEmail());
+                stmt.setString(4, c.getSenha());
+                stmt.setString(5, c.getTelefone());
+                if (c.getDataNascimento() != null) {
+                    stmt.setDate(6, new java.sql.Date(c.getDataNascimento().getTime()));
+                } else {
+                    stmt.setDate(6, null);
+                }
+                stmt.setString(7, c.getSexo());
+                stmt.setString(8, c.getEndereco());
+                stmt.setString(9, c.getStatus());
                 stmt.execute();
             }
 
@@ -41,15 +50,24 @@ public class ClienteDAO {
     }
 
     public void atualizar(Cliente c) {
-        String sql = "UPDATE cliente SET nome=?, email=?, telefone=?, id_academia=? WHERE id=?";
+        String sql = "UPDATE cliente SET nome=?, cpf=?, email=?, senha=?, telefone=?, data_nascimento=?, sexo=?, endereco=?, status=? WHERE id_cliente=?";
 
         try {
             try (PreparedStatement stmt = con.prepareStatement(sql)) {
                 stmt.setString(1, c.getNome());
-                stmt.setString(2, c.getEmail());
-                stmt.setString(3, c.getTelefone());
-                stmt.setInt(4, c.getIdAcademia());
-                stmt.setInt(5, c.getId());
+                stmt.setString(2, c.getCpf());
+                stmt.setString(3, c.getEmail());
+                stmt.setString(4, c.getSenha());
+                stmt.setString(5, c.getTelefone());
+                if (c.getDataNascimento() != null) {
+                    stmt.setDate(6, new java.sql.Date(c.getDataNascimento().getTime()));
+                } else {
+                    stmt.setDate(6, null);
+                }
+                stmt.setString(7, c.getSexo());
+                stmt.setString(8, c.getEndereco());
+                stmt.setString(9, c.getStatus());
+                stmt.setInt(10, c.getIdCliente());
                 stmt.execute();
             }
 
@@ -58,12 +76,12 @@ public class ClienteDAO {
         }
     }
 
-    public void excluir(int id) {
-        String sql = "DELETE FROM cliente WHERE id=?";
+    public void excluir(int idCliente) {
+        String sql = "DELETE FROM cliente WHERE id_cliente=?";
 
         try {
             try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, id);
+                stmt.setInt(1, idCliente);
                 stmt.execute();
             }
 
@@ -72,20 +90,25 @@ public class ClienteDAO {
         }
     }
 
-    public Cliente buscarPorId(int id) {
-        String sql = "SELECT * FROM cliente WHERE id=?";
+    public Cliente buscarPorId(int idCliente) {
+        String sql = "SELECT * FROM cliente WHERE id_cliente=?";
         Cliente c = new Cliente();
 
         try {
             try (PreparedStatement stmt = con.prepareStatement(sql)) {
-                stmt.setInt(1, id);
+                stmt.setInt(1, idCliente);
                 try (ResultSet rs = stmt.executeQuery()) {
                     if (rs.next()) {
-                        c.setId(rs.getInt("id"));
+                        c.setIdCliente(rs.getInt("id_cliente"));
                         c.setNome(rs.getString("nome"));
+                        c.setCpf(rs.getString("cpf"));
                         c.setEmail(rs.getString("email"));
+                        c.setSenha(rs.getString("senha"));
                         c.setTelefone(rs.getString("telefone"));
-                        c.setIdAcademia(rs.getInt("id_academia"));
+                        c.setDataNascimento(rs.getDate("data_nascimento"));
+                        c.setSexo(rs.getString("sexo"));
+                        c.setEndereco(rs.getString("endereco"));
+                        c.setStatus(rs.getString("status"));
                     }
                 }
             }
@@ -103,18 +126,23 @@ public class ClienteDAO {
 
         try {
             try (PreparedStatement stmt = con.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
-                
+
                 while (rs.next()) {
                     Cliente c = new Cliente();
-                    c.setId(rs.getInt("id"));
+                    c.setIdCliente(rs.getInt("id_cliente"));
                     c.setNome(rs.getString("nome"));
+                    c.setCpf(rs.getString("cpf"));
                     c.setEmail(rs.getString("email"));
+                    c.setSenha(rs.getString("senha"));
                     c.setTelefone(rs.getString("telefone"));
-                    c.setIdAcademia(rs.getInt("id_academia"));
-                    
+                    c.setDataNascimento(rs.getDate("data_nascimento"));
+                    c.setSexo(rs.getString("sexo"));
+                    c.setEndereco(rs.getString("endereco"));
+                    c.setStatus(rs.getString("status"));
+
                     lista.add(c);
                 }
-                
+
             }
 
         } catch (SQLException e) {

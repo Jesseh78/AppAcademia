@@ -16,7 +16,6 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import jakarta.servlet.annotation.*;
 import java.io.IOException;
-import java.sql.Date;
 
 @WebServlet(name = "HistoricoController", urlPatterns = {"/historico"})
 public class HistoricoController extends HttpServlet {
@@ -64,15 +63,27 @@ public class HistoricoController extends HttpServlet {
         Historico h = new Historico();
 
         h.setIdCliente(Integer.parseInt(request.getParameter("idCliente")));
-        h.setData(Date.valueOf(request.getParameter("data")));
-        h.setDescricao(request.getParameter("descricao"));
+        h.setIdAcademia(Integer.parseInt(request.getParameter("idAcademia")));
+        String dataCheckin = request.getParameter("dataCheckin");
+        if (dataCheckin != null && !dataCheckin.isEmpty()) {
+            h.setDataCheckin(java.sql.Date.valueOf(dataCheckin));
+        }
+        h.setHoraCheckin(request.getParameter("horaCheckin"));
+        h.setStatusCheckin(request.getParameter("statusCheckin"));
+        h.setTipoPlano(request.getParameter("tipoPlano"));
+        h.setObservacao(request.getParameter("observacao"));
+        h.setOrigemCheckin(request.getParameter("origemCheckin"));
+        String dataRegistro = request.getParameter("dataRegistro");
+        if (dataRegistro != null && !dataRegistro.isEmpty()) {
+            h.setDataRegistro(java.sql.Date.valueOf(dataRegistro));
+        }
 
-        String id = request.getParameter("id");
+        String id = request.getParameter("idHistorico");
 
         if (id == null || id.isEmpty()) {
             dao.inserir(h);
         } else {
-            h.setId(Integer.parseInt(id));
+            h.setIdHistorico(Integer.parseInt(id));
             dao.atualizar(h);
         }
 

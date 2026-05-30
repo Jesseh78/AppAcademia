@@ -61,16 +61,24 @@ public class ClienteController extends HttpServlet {
         Cliente c = new Cliente();
 
         c.setNome(request.getParameter("nome"));
+        c.setCpf(request.getParameter("cpf"));
         c.setEmail(request.getParameter("email"));
+        c.setSenha(request.getParameter("senha"));
         c.setTelefone(request.getParameter("telefone"));
-        c.setIdAcademia(Integer.parseInt(request.getParameter("idAcademia")));
+        String dataNascimento = request.getParameter("dataNascimento");
+        if (dataNascimento != null && !dataNascimento.isEmpty()) {
+            c.setDataNascimento(java.sql.Date.valueOf(dataNascimento));
+        }
+        c.setSexo(request.getParameter("sexo"));
+        c.setEndereco(request.getParameter("endereco"));
+        c.setStatus(request.getParameter("status"));
 
-        String id = request.getParameter("id");
+        String id = request.getParameter("idCliente");
 
         if (id == null || id.isEmpty()) {
             dao.inserir(c);
         } else {
-            c.setId(Integer.parseInt(id));
+            c.setIdCliente(Integer.parseInt(id));
             dao.atualizar(c);
         }
 

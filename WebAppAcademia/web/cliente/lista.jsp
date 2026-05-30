@@ -36,9 +36,11 @@
         <tr>
             <th>ID</th>
             <th>Nome</th>
+            <th>CPF</th>
             <th>Email</th>
             <th>Telefone</th>
-            <th>Ações</th>
+            <th>Status</th>
+            <th>Acoes</th>
         </tr>
         </thead>
 
@@ -50,19 +52,21 @@
         %>
 
         <tr>
-            <td><%= c.getId() %></td>
+            <td><%= c.getIdCliente() %></td>
             <td><%= c.getNome() %></td>
+            <td><%= c.getCpf() %></td>
             <td><%= c.getEmail() %></td>
             <td><%= c.getTelefone() %></td>
+            <td><%= c.getStatus() %></td>
 
             <td>
 
-                <a href="../cliente?acao=editar&id=<%= c.getId() %>"
+                <a href="../cliente?acao=editar&id=<%= c.getIdCliente() %>"
                    class="btn btn-warning btn-sm">
                     Editar
                 </a>
 
-                <a href="../cliente?acao=excluir&id=<%= c.getId() %>"
+                <a href="../cliente?acao=excluir&id=<%= c.getIdCliente() %>"
                    class="btn btn-danger btn-sm"
                    onclick="return confirm('Deseja excluir este cliente?')">
                     Excluir

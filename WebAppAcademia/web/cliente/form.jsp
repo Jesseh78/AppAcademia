@@ -29,7 +29,7 @@
     <form method="post" action="../cliente">
 
         <% if (editando) { %>
-        <input type="hidden" name="id" value="<%= cliente.getId() %>">
+        <input type="hidden" name="idCliente" value="<%= cliente.getIdCliente() %>">
         <% } %>
 
         <div class="mb-3">
@@ -39,9 +39,21 @@
         </div>
 
         <div class="mb-3">
+            <label class="form-label" for="cpf">CPF</label>
+            <input type="text" id="cpf" name="cpf" class="form-control"
+                   value="<%= editando ? cliente.getCpf() : "" %>" required>
+        </div>
+
+        <div class="mb-3">
             <label class="form-label" for="email">E-mail</label>
             <input type="email" id="email" name="email" class="form-control"
                    value="<%= editando ? cliente.getEmail() : "" %>" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="senha">Senha</label>
+            <input type="password" id="senha" name="senha" class="form-control"
+                   value="<%= editando ? cliente.getSenha() : "" %>" required>
         </div>
 
         <div class="mb-3">
@@ -51,26 +63,31 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label" for="idAcademia">Academia</label>
-            <select id="idAcademia" name="idAcademia" class="form-select" required>
-                <option value="">Selecione uma academia</option>
+            <label class="form-label" for="dataNascimento">Data de Nascimento</label>
+            <input type="date" id="dataNascimento" name="dataNascimento" class="form-control"
+                   value="<%= editando && cliente.getDataNascimento() != null ? new java.text.SimpleDateFormat("yyyy-MM-dd").format(cliente.getDataNascimento()) : "" %>">
+        </div>
 
-                <% if (academiasList != null) {
-                    for (Academia a : academiasList) {
-                %>
-                <option value="<%= a.getId() %>"
-                        <%= editando && cliente.getIdAcademia() == a.getId() ? "selected" : "" %>>
-                    <%= a.getNome() %>
-                </option>
-                <%
-                        }
-                    }
-                %>
-            </select>
+        <div class="mb-3">
+            <label class="form-label" for="sexo">Sexo</label>
+            <input type="text" id="sexo" name="sexo" class="form-control"
+                   value="<%= editando ? cliente.getSexo() : "" %>">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="endereco">Endereco</label>
+            <input type="text" id="endereco" name="endereco" class="form-control"
+                   value="<%= editando ? cliente.getEndereco() : "" %>">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="status">Status</label>
+            <input type="text" id="status" name="status" class="form-control"
+                   value="<%= editando ? cliente.getStatus() : "" %>">
         </div>
 
         <button type="submit" class="btn btn-primary">
-            <%= editando ? "Salvar Alterações" : "Cadastrar" %>
+            <%= editando ? "Salvar Alteracoes" : "Cadastrar" %>
         </button>
 
         <a href="../cliente?acao=listar" class="btn btn-secondary">Voltar</a>

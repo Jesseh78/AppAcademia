@@ -39,6 +39,9 @@
             <th>Cliente</th>
             <th>Academia</th>
             <th>Data</th>
+            <th>Hora</th>
+            <th>Status</th>
+            <th>Plano</th>
         </tr>
 
         </thead>
@@ -52,13 +55,19 @@
 
         <tr>
 
-            <td><%= h.getId() %></td>
+            <td><%= h.getIdHistorico() %></td>
 
-            <td><%= h.getNomeCliente() %></td>
+            <td><%= h.getIdCliente() %></td>
 
-            <td><%= h.getNomeAcademia() %></td>
+            <td><%= h.getIdAcademia() %></td>
 
             <td><%= h.getDataCheckin() %></td>
+
+            <td><%= h.getHoraCheckin() %></td>
+
+            <td><%= h.getStatusCheckin() %></td>
+
+            <td><%= h.getTipoPlano() %></td>
 
         </tr>
 
